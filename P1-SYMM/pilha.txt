@@ -1,0 +1,18 @@
+- Pilha symm
+		ponteiro-C      -48(%rbp) pointer64
+		ponteiro-B      -40(%rbp) pointer64
+		ponteiro-A      -32(%rbp) pointer64
+		beta            -24(%rbp) float32
+		alpha           -20(%rbp) float32
+		n               -16(%rbp) int32
+		m               -12(%rbp) int32
+		call symm        -8(%rbp) pointer64
+rbp --> rbp               0(%rbp) pointer64
+		offset-a         +8(%rbp) pointer64
+		offset-b        +16(%rbp) pointer64
+		offset-c        +24(%rbp) pointer64
+		temp            +28(%rbp) float32
+		i               +32(%rbp) int32
+		j               +36(%rbp) int32
+    	k	            +40(%rbp) int32
+rsp --> aux1            +48(%rbp) pointer64

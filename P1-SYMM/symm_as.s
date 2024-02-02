@@ -1,6 +1,8 @@
 .global main 
 
 .data
+
+    banner: .asciz "   _______     ____  __ __  __ \n  / ____\\ \\   / /  \\/  |  \\/  |\n | (___  \\ \\_/ /| \\  / | \\  / |\n  \\___ \\  \\   / | |\\/| | |\\/| |\n  ____) |  | |  | |  | | |  | |\n |_____/   |_|  |_|  |_|_|  |_|\n"
     null:   .float 0
 
     m:      .int 3
@@ -34,23 +36,118 @@
 
     floatf:    .asciz "%f\t"
     novalinha:   .asciz "\n"
+    entradaint: .asciz "%d"
+    entradafloat: .asciz "%f"
 
     mmatrizA:   .asciz "\nMatriz A:"
     mmatrizB:   .asciz "\nMatriz B:"
     mmatrizC:   .asciz "\nMatriz C:"
+    entradam:   .asciz "\nDigite o valor de m: "
+    entradan:   .asciz "\nDigite o valor de n: "
+    entradaalpha: .asciz "\nDigite o valor de alpha: "
+    entradabeta: .asciz "\nDigite o valor de beta: "
 
 .text
 
 main:
+
+    mov $banner, %rdi # imprime o banner na tela
+    sub $8, %rsp
+    call puts
+    add $8, %rsp
     #push %rbp
     #mov %rsp, %rbp
 
-    mov $36, %rdi                               # uma matrix 3x3 tem 36 bytes
+    
+    mov $entradam, %rdi # pede ao usuário o valor de m
+    sub $8, %rsp
+    call puts
+    add $8, %rsp  
+/   
+    sub $8, %rsp
+    leaq 8(%rsp), %rax
+    movq %rax, %rsi
+    mov $entradaint, %rdi
+    mov $0, %rax
+    #sub $8, %rsp
+    call scanf
+    #add $8, %rsp 
+    mov 8(%rsp), %eax # rax pega o valor recebido do usuário
+    add $8, %rsp
+
+    mov %eax, m(%rip)
+
+#################
+
+    mov $entradan, %rdi # pede ao usuário o valor de n
+    sub $8, %rsp
+    call puts
+    add $8, %rsp  
+/   
+    sub $8, %rsp
+    leaq 8(%rsp), %rax
+    movq %rax, %rsi
+    mov $entradaint, %rdi
+    mov $0, %rax
+    #sub $8, %rsp
+    call scanf
+    #add $8, %rsp 
+    mov 8(%rsp), %eax # rax pega o valor recebido do usuário
+    add $8, %rsp
+
+    mov %eax, n(%rip)
+###############
+
+    mov $entradaalpha, %rdi # pede ao usuário o valor de alhpa
+    sub $8, %rsp
+    call puts
+    add $8, %rsp  
+/   
+    sub $8, %rsp
+    leaq 8(%rsp), %rax
+    movq %rax, %rsi
+    mov $entradafloat, %rdi
+    mov $0, %rax
+    #sub $8, %rsp
+    call scanf
+    #add $8, %rsp 
+    movss 8(%rsp), %xmm0 # xmm0 pega o valor recebido do usuário
+    add $8, %rsp
+
+    movss %xmm0, alpha(%rip)
+
+###############
+
+    mov $entradabeta, %rdi # pede ao usuário o valor de beta
+    sub $8, %rsp
+    call puts
+    add $8, %rsp  
+/   
+    sub $8, %rsp
+    leaq 8(%rsp), %rax
+    movq %rax, %rsi
+    mov $entradafloat, %rdi
+    mov $0, %rax
+    #sub $8, %rsp
+    call scanf
+    #add $8, %rsp 
+    movss 8(%rsp), %xmm0 # xmm0 pega o valor recebido do usuário
+    add $8, %rsp
+
+    movss %xmm0, beta(%rip)
+
+###############
+
+    mov m(%rip), %eax
+    imul n(%rip), %eax
+    mov %eax, %edi                               # uma matrix 3x3 tem 36 bytes
     call malloc
     push %rax # C
-    
+######
+   
     mov $36, %rdi
     call malloc
+
     movss b00(%rip), %xmm0
     movss %xmm0, (%rax)
     movss b01(%rip), %xmm0
@@ -73,6 +170,7 @@ main:
 
     mov $36, %rdi
     call malloc
+
     movss a00(%rip), %xmm0
     movss %xmm0, (%rax)
     movss a01(%rip), %xmm0
@@ -92,7 +190,8 @@ main:
     movss a22(%rip), %xmm0
     movss %xmm0, 32(%rax)   
     push %rax # A
-    
+
+
     mov $12, %rdi # espaço para 3 floats
     call malloc
     movss alpha(%rip), %xmm0
@@ -103,29 +202,12 @@ main:
     movss %xmm0, 8(%rax)
     push %rax
 
-/*    # print int
-    mov %rax, %rsi
-    mov $format2, %rdi
-    mov $0, %rax
-    sub $8, %rsp
-    call printf    
-    add $8, %rsp*/
-
     movl n(%rip), %eax
     sub $4, %rsp
     movl %eax, (%rsp) # empilha o n
     movl m(%rip), %eax
     sub $4, %rsp
     movl %eax, (%rsp) # empilha o m
-/*
-    mov 8(%rsp), %rsi
-    mov $format2, %rdi
-    mov $0, %rax
-    sub $8, %rsp
-    call printf    
-    add $8, %rsp*/
-
-    #call symm
 /*
     # print int
     mov (%rsp), %rsi
@@ -147,24 +229,9 @@ main:
     add $16, %rsp */
 
     call symm
-/*
-    # print float
-    mov 8(%rsp), %rax
-    movss (%rax), %xmm0 # teste print
-    cvtss2sd %xmm0, %xmm0
-    mov $format1, %rdi
-    mov $1, %rax
-    sub $16, %rsp
-    call printf   
-    add $16, %rsp  */
+
     mov 32(%rsp), %rax # copia o endereço de C
     mov %rax, 8(%rsp)
- /*   mov 8(%rsp), %rsi
-    mov $format2, %rdi
-    mov $0, %rax
-    sub $8, %rsp
-    call printf    
-    add $8, %rsp*/
 
     mov $mmatrizC, %rdi
     sub $8, %rsp
@@ -184,14 +251,6 @@ symm:
     mov %rsp, %rbp
     subq $16, %rsp                              # 8 + 8 + 8 + 4 + 4 + 4 + 4 + 8: reserva de espaço para variáveis
     mov 24(%rbp), %r10                        # pega o endereço base do vetor [alpha, beta, temp]
-/*
-    #mov 4(%r10), %rsi
-    mov $format2, %rdi
-    mov $0, %rax
-    sub $8, %rsp
-    call printf    
-    add $8, %rsp*/
-
 
     movl $-1, -4(%rbp)                          # inicializa o índice i
     loop1_symm:
@@ -324,7 +383,6 @@ imprime_matriz:
         cmpl 16(%rbp), %ecx                    # verifica se i < m
         je exit_imprime
 
-
         movl $-1, -8(%rbp)                      # inicializa o índice j
         loopj_imprime:
             incl -8(%rbp)                       # incrementa j
@@ -361,3 +419,4 @@ exit_imprime:
     pop %rbp
     xor %rax, %rax
     ret
+

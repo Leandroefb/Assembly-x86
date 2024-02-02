@@ -140,14 +140,19 @@ main:
 
     mov m(%rip), %eax
     imul n(%rip), %eax
-    mov %eax, %edi                               # uma matrix 3x3 tem 36 bytes
+    imul $4, %eax
+    mov %eax, %edi                               # 
     call malloc
     push %rax # C
 ######
-   
-    mov $36, %rdi
+
+    mov m(%rip), %eax
+    imul n(%rip), %eax
+    imul $4, %eax
+    mov %eax, %edi       
     call malloc
 
+    
     movss b00(%rip), %xmm0
     movss %xmm0, (%rax)
     movss b01(%rip), %xmm0
@@ -167,8 +172,13 @@ main:
     movss b22(%rip), %xmm0
     movss %xmm0, 32(%rax) 
     push %rax # B
+    
 
-    mov $36, %rdi
+
+    mov m(%rip), %eax
+    imul %eax, %eax
+    imul $4, %eax
+    mov %eax, %edi
     call malloc
 
     movss a00(%rip), %xmm0

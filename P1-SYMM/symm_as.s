@@ -32,8 +32,12 @@
     format1: .asciz "float: %f\n"
     format2: .asciz "int: %d\n"
 
-    float:      .asciz " %f "
-    newline:   .asciz "\n"
+    floatf:    .asciz "%f\t"
+    novalinha:   .asciz "\n"
+
+    mmatrizA:   .asciz "\nMatriz A:"
+    mmatrizB:   .asciz "\nMatriz B:"
+    mmatrizC:   .asciz "\nMatriz C:"
 
 .text
 
@@ -99,13 +103,13 @@ main:
     movss %xmm0, 8(%rax)
     push %rax
 
-    # print int
+/*    # print int
     mov %rax, %rsi
     mov $format2, %rdi
     mov $0, %rax
     sub $8, %rsp
     call printf    
-    add $8, %rsp
+    add $8, %rsp*/
 
     movl n(%rip), %eax
     sub $4, %rsp
@@ -113,13 +117,13 @@ main:
     movl m(%rip), %eax
     sub $4, %rsp
     movl %eax, (%rsp) # empilha o m
-
+/*
     mov 8(%rsp), %rsi
     mov $format2, %rdi
     mov $0, %rax
     sub $8, %rsp
     call printf    
-    add $8, %rsp
+    add $8, %rsp*/
 
     #call symm
 /*
@@ -155,11 +159,16 @@ main:
     add $16, %rsp  */
     mov 32(%rsp), %rax # copia o endereço de C
     mov %rax, 8(%rsp)
-    mov 8(%rsp), %rsi
+ /*   mov 8(%rsp), %rsi
     mov $format2, %rdi
     mov $0, %rax
     sub $8, %rsp
     call printf    
+    add $8, %rsp*/
+
+    mov $mmatrizC, %rdi
+    sub $8, %rsp
+    call puts
     add $8, %rsp
 
     call imprime_matriz
@@ -309,16 +318,19 @@ imprime_matriz:
     subq $8, %rsp # reserva espaço para i, j, 
     movl $-1, -4(%rbp)                          # inicializa o índice i
     loopi_imprime:
+
         incl -4(%rbp)                           # incrementa i
         mov -4(%rbp), %ecx                      # copia o índice i para %ecx, não é possível comparar dois endereços de memória diretamente
         cmpl 16(%rbp), %ecx                    # verifica se i < m
         je exit_imprime
+
+
         movl $-1, -8(%rbp)                      # inicializa o índice j
         loopj_imprime:
             incl -8(%rbp)                       # incrementa j
             mov -8(%rbp), %ecx                  # copia o índice j para %ecx, não é possível comparar dois endereços de memória diretamente
             cmpl 20(%rbp), %ecx                # verifica se j < n
-            je loopi_imprime  
+            je loopi2_imprime  
             movl -4(%rbp), %eax             # guarda i em %eax
             imull 20(%rbp), %eax           # calcula (i * n) e guarda em %eax
             addl -8(%rbp), %eax             # calcula [(i * n) + j] e guarda em %eax
@@ -327,13 +339,22 @@ imprime_matriz:
             addq 24(%rbp), %rax            # %rax tem o endereço exato do elemento M[i][j]
             movss (%rax), %xmm0             # %xmm0 tem M[i][J]
             cvtss2sd %xmm0, %xmm0
-            mov $format1, %rdi
+            #push %rbp
+            mov $floatf, %rdi
             mov $1, %rax
+            #mov %rsp, %rbp
             sub $8, %rsp
             call printf   
+            #pop %rbp
             add $8, %rsp 
             jmp loopj_imprime
 
+    loopi2_imprime:
+        sub $8, %rsp
+        mov $novalinha, %rdi
+        call puts
+        add $8, %rsp
+        jmp loopi_imprime
 
 exit_imprime:
     mov %rbp, %rsp

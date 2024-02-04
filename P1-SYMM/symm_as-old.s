@@ -254,7 +254,7 @@ continua:
     imul $4, %eax
     mov %eax, %edi
     call malloc
-
+/*
     movss a00(%rip), %xmm0
     movss %xmm0, (%rax)
     movss a01(%rip), %xmm0
@@ -274,7 +274,59 @@ continua:
     movss a22(%rip), %xmm0
     movss %xmm0, 32(%rax)   
     push %rax # A
+*/
 
+    push %rax # A
+    movq %rax, %rbx
+    # print int
+    movq %rax, %rsi
+    mov $format2, %rdi
+    mov $0, %rax
+    sub $8, %rsp
+    call printf    
+    add $8, %rsp
+
+    # print int
+    mov (%rsp), %rsi
+    mov $format2, %rdi
+    mov $0, %rax
+    sub $8, %rsp
+    call printf    
+    add $8, %rsp
+
+    movq $-1, %r12
+    loopi2:
+        inc %r12
+        cmp $9, %r12
+        je continua2
+        mov $entradabeta, %rdi # pede ao usuário o valor de beta
+        sub $8, %rsp
+        call puts
+        add $8, %rsp  
+    /   
+        sub $8, %rsp
+        leaq 8(%rsp), %rax
+        movq %rax, %rsi
+        mov $entradafloat, %rdi
+        mov $0, %rax
+        sub $8, %rsp
+        call scanf
+        add $8, %rsp 
+        movss 8(%rsp), %xmm0 # xmm0 pega o valor recebido do usuário
+        add $8, %rsp    
+
+        movq %r12, %rax
+        imulq $4, %rax
+        addq %rbx, %rax
+
+        movss %xmm0, (%rax)
+
+        jmp loopi2
+
+        
+continua2:
+    pop %rax
+    push %rbx
 
     mov $12, %rdi # espaço para 3 floats
     call malloc

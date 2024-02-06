@@ -45,8 +45,7 @@ main:
     call puts
     add $8, %rsp  
     sub $8, %rsp
-    leaq 8(%rsp), %rax
-    movq %rax, %rsi
+    leaq 8(%rsp), %rsi
     mov $entradaint, %rdi # formato da entrada
     mov $0, %rax
     call scanf
@@ -61,8 +60,7 @@ main:
     call puts
     add $8, %rsp  
     sub $8, %rsp
-    leaq 8(%rsp), %rax
-    movq %rax, %rsi
+    leaq 8(%rsp), %rsi
     mov $entradaint, %rdi # formato da entrada
     mov $0, %rax
     call scanf
@@ -78,8 +76,7 @@ main:
     call puts
     add $8, %rsp  
     sub $8, %rsp
-    leaq 8(%rsp), %rax
-    movq %rax, %rsi
+    leaq 8(%rsp), %rsi
     mov $entradafloat, %rdi # formato da entrada
     mov $0, %rax
     call scanf
@@ -87,15 +84,14 @@ main:
     add $8, %rsp
     movss %xmm0, alpha(%rip) # salva o valor de alpha 
 
-############### RECEB BETA
+############### RECEBE BETA
 
     mov $entradabeta, %rdi # pede ao usuário o valor de beta
     sub $8, %rsp
     call puts
     add $8, %rsp  
     sub $8, %rsp
-    leaq 8(%rsp), %rax
-    movq %rax, %rsi
+    leaq 8(%rsp), %rsi
     mov $entradafloat, %rdi # formato da entrada
     mov $0, %rax
     call scanf
@@ -111,7 +107,7 @@ main:
     mov %eax, %edi                               
     call malloc
     push %rax # coloca na pilha o endereço de memória do primeiro elemento do bloco de memória que aloca a matriz C
-    movq %rax, %rbx
+    movq %rax, %rbx # salva para ser usado depois, rbx é callee saved, alternativa a pilha
     mov $entradaC, %rdi 
     sub $8, %rsp
     call puts # imprime as orientações para reeceber a matriz C
@@ -149,7 +145,7 @@ continuaC:
     mov %eax, %edi       
     call malloc
     push %rax # coloca na pilha o endereço de memória do primeiro elemento do bloco de memória que aloca a matriz B
-    movq %rax, %rbx
+    movq %rax, %rbx # salva para ser usado depois, rbx é callee saved, alternativa a pilha
     mov $entradaB, %rdi 
     sub $8, %rsp
     call puts # imprime as orientações para reeceber a matriz B
@@ -187,8 +183,8 @@ continuaB:
     imul $4, %eax
     mov %eax, %edi
     call malloc
-    push %rax # # coloca na pilha o endereço de memória do primeiro elemento do bloco de memória que aloca a matriz A
-    movq %rax, %rbx
+    push %rax # coloca na pilha o endereço de memória do primeiro elemento do bloco de memória que aloca a matriz A
+    movq %rax, %rbx # salva para ser usado depois, rbx é callee saved, alternativa a pilha
     mov $entradaA, %rdi 
     sub $8, %rsp
     call puts # imprime as orientações para reeceber a matriz A
@@ -237,7 +233,6 @@ continuaA:
     sub $8, %rsp
     call puts
     add $8, %rsp
-
     call imprime_matriz
 
     mov (%rsp), %rdi # limpa o bloco de memória da matrix C

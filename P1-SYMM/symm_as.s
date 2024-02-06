@@ -219,19 +219,19 @@ continuaA:
     pop %rax
     push %rbx
 
+    mov 16(%rsp), %rbx
 ############### EXECUTA O ALGORITMO SYMM
 
     call symm
 
 ############### IMPRIME C    
-/*
-    mov (%rsp), %rax
-    call free
-    mov 8(%rsp), %rax
-    call free
-*/
-    mov 16(%rsp), %rax # copia o endereço de C
 
+    mov 0(%rsp), %rdi # limpa o bloco de memória da matrix B
+    call free
+    mov 8(%rsp), %rdi # limpa o bloco de memória da matrix A
+    call free
+
+    mov 16(%rsp), %rax # copia o endereço de C
     mov %rax, (%rsp) # coloca o endereço de C no topo da pilha; como o código encerra por aqui, não é necessário respeitar o valor que já estava lá
     mov $mmatrizC, %rdi
     sub $8, %rsp
@@ -240,8 +240,8 @@ continuaA:
 
     call imprime_matriz
 
-    mov (%rsp), %rax
-    #call free
+    mov (%rsp), %rdi # limpa o bloco de memória da matrix C
+    call free
 
 exit:
     mov $60, %rax
@@ -402,5 +402,3 @@ exit_imprime:
     pop %rbp
     xor %rax, %rax
     ret
-
-

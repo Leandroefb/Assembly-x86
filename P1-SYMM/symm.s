@@ -1,3 +1,11 @@
+/*
+    SYMM - Symmetric Matrix Multiplication
+    
+    Alunos: Leandro Eugênio Farias Berton   RA: 129268
+            Murilo Luis Calvo Neves         RA: 129037
+            Fernando Silva Grande           RA: 125294
+*/
+
 .global main 
 
 .data
@@ -11,14 +19,6 @@
     beta:   .float 3.14
     temp:   .float 0
 
-    format1: .asciz "float: %f\n"
-    format2: .asciz "int: %d\n"
-
-    floatf:    .asciz "%f\t"
-    novalinha:   .asciz "\n"
-    entradaint: .asciz "%d"
-    entradafloat: .asciz "%f"
-
     mmatrizA:   .asciz "\nMatriz A:"
     mmatrizB:   .asciz "\nMatriz B:"
     mmatrizC:   .asciz "\nMatriz C:"
@@ -29,6 +29,11 @@
     entradaC:   .asciz "\nDigite os elementos da matriz na sequencia C00, C01, ..., C10, C11, ... um elemento cada linha"
     entradaB:   .asciz "\nDigite os elementos da matriz na sequencia B00, B01, ..., B10, B11, ...um elemento cada linha"
     entradaA:   .asciz "\nDigite os elementos da matriz A na sequencia A00, A01, ..., A10, A11, ... um elemento cada linha"
+
+    floatf:    .asciz "%f\t"
+    novalinha:   .asciz "\n"
+    entradaint: .asciz "%d"
+    entradafloat: .asciz "%f"
 
 .text
 main:

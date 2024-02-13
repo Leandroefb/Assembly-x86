@@ -3,7 +3,7 @@
 		ponteiro-B      	 24(%rbp) pointer64
 		ponteiro-A     		 16(%rbp) pointer64
 		call symm        	 8(%rbp)  pointer64
-rbp --> 	rbp               	 0(%rbp)  pointer64
+rbp --> rbp               	 0(%rbp)  pointer64
 		i               	-4(%rbp)  int32
 		j               	-8(%rbp)  int32
-rsp --> 	k	            	-12(%rbp) int32
+rsp --> k	            	-12(%rbp) int32
